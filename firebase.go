@@ -1,13 +1,11 @@
-package firebase
+package bookeeping 
 
 import (
     "context"
     "log"
-    //"reflect"
     firebase "firebase.google.com/go"
     "google.golang.org/api/option"
     db "firebase.google.com/go/db"
-    //"fmt"
 )
 
 type Firebase struct {
@@ -15,14 +13,14 @@ type Firebase struct {
     ctx context.Context
 }
 
-
-func Init() (*Firebase,error) {
+func newFirebase(accountPath string,projectName string) (*Firebase,error) {
     ctx := context.Background()
     conf := &firebase.Config{
-        DatabaseURL: "https://euphoric-anchor-238602.firebaseio.com",
+        //DatabaseURL: "https://euphoric-anchor-238602.firebaseio.com",
+        DatabaseURL: "https://"+projectName+".firebaseio.com",
     }
 
-    opt := option.WithCredentialsFile("service-account.json")
+    opt := option.WithCredentialsFile(accountPath)
     app, err := firebase.NewApp(ctx, conf, opt)
 
     if err != nil {
@@ -42,6 +40,7 @@ func Init() (*Firebase,error) {
 
     return &construct,nil
 }
+
 //method for client object
 func (c *Firebase) Set(path string,data interface{}) (bool) {
     ref := c.client.NewRef(path)
@@ -68,10 +67,8 @@ func (c *Firebase) Push(path string,data interface{}) (string,error) {
 
 func (c *Firebase) Get(path string,st interface{}) (bool,error) {
     ref := c.client.NewRef(path)
-    //t := reflect.ValueOf(st)
-    //post := t
-    
-    if err := ref.Get(c.ctx, &st); err != nil {
+
+    if err := ref.Get(c.ctx, st); err != nil {
         log.Fatalln("Error initializing database client:", err)
 
         return false,err
