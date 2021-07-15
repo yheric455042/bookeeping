@@ -1,6 +1,11 @@
 package bookeeping
 
-func GetFirebase(path string,project string) (*Firebase,error) {
+func NewFirebase(path string,project string) (*Firebase,error) {
 
     return newFirebase(path,project)
+}
+
+func NewCache() (*Cache) {
+    
+    return newCache()
 }

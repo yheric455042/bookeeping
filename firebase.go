@@ -1,4 +1,4 @@
-package bookeeping 
+package bookeeping
 
 import (
     "context"
